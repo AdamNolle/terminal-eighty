@@ -1,0 +1,29 @@
+{{!< default}}
+
+{{#post}}
+<article class="post-full {{post_class}}">
+    
+    <header class="post-card">
+        <div class="card-terminal-bar">
+            <div class="card-status-box"></div>
+            <div class="card-scanlines"></div>
+        </div>
+        <div class="post-card-content">
+            <h1 class="post-title">{{title}}</h1>
+            
+            <p class="post-meta">
+                >> {{date published_at format="YYYY-MM-DD HH:mm"}} 
+                {{#if tags}}
+                    <span style="opacity: 0.5; margin: 0 5px;">|</span> 
+                    {{tags prefix="[" separator="] [" suffix="]"}}
+                {{/if}}
+            </p>
+        </div>
+    </header>
+
+    <section class="post-content">
+        {{content}}
+    </section>
+
+</article>
+{{/post}}

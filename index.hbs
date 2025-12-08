@@ -1,0 +1,40 @@
+{{!< default}}
+
+<div class="post-feed">
+    
+    {{#unless @member}}
+    <div class="subscribe-box">
+        <div class="subscribe-title">>> PLUG INTO TERMINAL EIGHTY</div>
+        <form data-members-form="subscribe" class="subscribe-form">
+            <input data-members-email type="email" required="true" placeholder="user@terminal.net" class="subscribe-input"/>
+            <button type="submit" class="subscribe-btn">CONNECT</button>
+            <div class="message-success">>> WELCOME! CHECK YOUR INBOX.</div>
+            <div class="message-error">>> ERROR. PLEASE TRY AGAIN.</div>
+        </form>
+    </div>
+    {{/unless}}
+
+    {{#foreach posts}}
+        <article class="post-card">
+            <a href="{{url}}">
+                <div class="card-terminal-bar">
+                    <div class="card-status-box"></div> 
+                    <div class="card-scanlines"></div>  
+                </div>
+                <div class="post-card-content">
+                    <h2 class="post-title">{{title}}</h2>
+                    
+                    <p class="post-meta">
+                        >> {{date published_at format="YYYY-MM-DD HH:mm"}} 
+                        {{#if tags}}
+                            <span style="opacity: 0.5; margin: 0 5px;">|</span> 
+                            {{tags prefix="[" separator="] [" suffix="]" limit="3"}}
+                        {{/if}}
+                    </p>
+                </div>
+            </a>
+        </article>
+    {{/foreach}}
+</div>
+
+{{pagination}}

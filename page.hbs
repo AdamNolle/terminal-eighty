@@ -1,24 +1,21 @@
-{{!< default}}
+{{!< default}} {{#post}} <article class="{{post_class}}">
 
-{{#post}}
-<article class="{{post_class}}">
-    
     {{! This block fixes the "@page.show_title_and_feature_image" error }}
-    {{#match @page.show_title_and_feature_image}}
-        <header class="post-card">
-            <div class="card-terminal-bar">
-                <div class="card-status-box"></div>
-                <div class="card-scanlines"></div>
-            </div>
-            <div class="post-card-content">
-                <h1 class="post-title">{{title}}</h1>
-            </div>
-        </header>
-    {{/match}}
+    {{#if @page.show_title_and_feature_image}}
+    <header class="post-card">
+        <div class="card-terminal-bar">
+            <div class="card-status-box"></div>
+            <div class="card-scanlines"></div>
+        </div>
+        <div class="post-card-content">
+            <h1 class="post-title">{{title}}</h1>
+        </div>
+    </header>
+    {{/if}}
 
     <section class="post-content">
         {{content}}
     </section>
 
-</article>
-{{/post}}
+    </article>
+    {{/post}}

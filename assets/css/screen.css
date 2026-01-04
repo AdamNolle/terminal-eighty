@@ -4,27 +4,35 @@
     --card-bg: #ffffff;
     --ink-color: #000000;
     --terminal-green: #00ff00;
-    
+    --terminal-red: #ff3333; /* Added for Error State */
+
     /* Global Settings */
-    --border-width: 4px; /* The Thick "Blocky" Border */
+    --border-width: 4px;
     --font-mono: 'Courier New', Courier, monospace;
     --max-width: 800px;
-    
+
     /* Ghost Font Support */
     --gh-font-heading: 'Courier New', Courier, monospace;
     --gh-font-body: 'Courier New', Courier, monospace;
+
+    /* New Serif Font */
+    --font-serif: 'Garamond', 'Georgia', serif;
 }
 
 /* --- DARK MODE OVERRIDES --- */
 [data-theme="dark"] {
-    --bg-color: #0d0d0d;       
-    --card-bg: #000000;        
-    --ink-color: #e0e0e0;      
-    --terminal-green: #00ff00; 
+    --bg-color: #0d0d0d;
+    --card-bg: #000000;
+    --ink-color: #e0e0e0;
+    --terminal-green: #00ff00;
+    --terminal-red: #ff3333;
 }
 
 /* Reset & Basics */
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 20px;
@@ -34,7 +42,10 @@ body {
     transition: background 0.3s, color 0.3s;
 }
 
-a { text-decoration: none; color: inherit; }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
 /* Main Container */
 .viewport {
@@ -62,21 +73,25 @@ header.site-head {
 .header-green-box {
     width: 32px;
     height: 32px;
-    background-color: #000000; 
-    /* REMOVED: border: 1px solid var(--terminal-green); */
+    background-color: #000000;
     position: relative;
 }
+
 .header-green-box::after {
     content: '';
     position: absolute;
-    bottom: 4px; left: 4px; right: 4px; height: 6px;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    height: 6px;
     background-color: var(--terminal-green);
 }
 
-/* LOGO: Dark Mode (Green Box, Black Dash) */
+/* LOGO: Dark Mode */
 [data-theme="dark"] .header-green-box {
     background-color: var(--terminal-green);
 }
+
 [data-theme="dark"] .header-green-box::after {
     background-color: #000000;
 }
@@ -86,7 +101,10 @@ header.site-head {
     font-weight: bold;
     color: var(--ink-color);
 }
-.site-title:hover { text-decoration: underline; }
+
+.site-title:hover {
+    text-decoration: underline;
+}
 
 /* --- HEADER BUTTONS --- */
 .header-actions {
@@ -107,17 +125,22 @@ header.site-head {
     text-transform: uppercase;
     display: inline-block;
 }
+
 .header-btn:hover {
     color: var(--terminal-green);
     text-decoration: underline;
 }
 
 .rss-icon svg {
-    width: 24px; height: 24px;
+    width: 24px;
+    height: 24px;
     fill: var(--ink-color);
     display: block;
 }
-.rss-icon:hover svg { fill: var(--terminal-green); }
+
+.rss-icon:hover svg {
+    fill: var(--terminal-green);
+}
 
 /* --- MEMBERSHIP FORM --- */
 .subscribe-box {
@@ -141,7 +164,7 @@ header.site-head {
 
 .subscribe-input {
     flex-grow: 1;
-    background: #000000; 
+    background: #000000;
     color: var(--terminal-green);
     border: 1px solid var(--ink-color);
     padding: 12px;
@@ -150,77 +173,308 @@ header.site-head {
     outline: none;
 }
 
+/* Standard Button Style */
 .subscribe-btn {
     background: var(--terminal-green);
-    color: #000000 !important; 
+    color: #000000 !important;
     border: none;
     padding: 12px 24px;
     font-family: var(--font-mono);
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
+    font-size: 1rem; 
+    min-width: 120px; /* Ensures button doesn't shrink too much */
+    position: relative;
+    transition: all 0.2s ease;
 }
-.subscribe-btn:hover { opacity: 0.8; }
 
-.message-success { display: none; color: var(--ink-color); margin-top: 10px; }
-.message-error { display: none; color: red; margin-top: 10px; }
-form[data-members-form="success"] .message-success { display: block; }
-form[data-members-form="error"] .message-error { display: block; }
+.subscribe-btn:hover {
+    opacity: 0.8;
+}
+
+/* --- SUBSCRIBE FORM STATES (COMPLETED) --- */
+
+/* 1. LOADING STATE */
+.subscribe-form.loading .subscribe-btn {
+    font-size: 0 !important; /* Hide "CONNECT" */
+    width: 120px;
+    background-color: var(--ink-color);
+    cursor: wait;
+    pointer-events: none;
+}
+
+.subscribe-form.loading .subscribe-btn::after {
+    content: "...";
+    font-size: 1rem;
+    color: var(--bg-color);
+}
+
+/* 2. SUCCESS STATE (Green "ADDED") */
+form[data-members-form="success"] .subscribe-input {
+    display: none;
+}
+
+form[data-members-form="success"] .subscribe-btn {
+    font-size: 0 !important;
+    width: 100%; /* Full width bar */
+    background-color: var(--terminal-green);
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 46px; 
+}
+
+form[data-members-form="success"] .subscribe-btn::after {
+    content: "ADDED";
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* 3. ERROR STATE (Red "RETRY") */
+form[data-members-form="error"] .subscribe-btn {
+    font-size: 0 !important;
+    background-color: var(--terminal-red); /* Red */
+    color: white !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    min-width: 120px;
+}
+
+form[data-members-form="error"] .subscribe-btn::after {
+    content: "RETRY"; /* Changes text to RETRY */
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Hide Default Messages (Button handles feedback now) */
+.message-success, .message-error {
+    display: none;
+}
+/* Show error message text below if you really want specific details */
+form[data-members-form="error"] .message-error {
+    display: block;
+    width: 100%;
+    color: var(--terminal-red);
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
 
 /* --- POST CARD DESIGN --- */
 .post-card {
     border: var(--border-width) solid var(--ink-color);
     margin-bottom: 24px;
     background: var(--card-bg);
-    display: block; 
+    display: block;
 }
+
 .post-card:hover {
     transform: translateY(-2px);
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .card-terminal-bar {
     display: flex;
-    align-items: center; 
-    /* Increased spacing to give the header "room" like your image */
-    padding: 12px 12px 0 12px; 
+    align-items: center;
+    padding: 12px 12px 0 12px;
     height: auto;
     margin-bottom: 10px;
 }
 
 .card-status-box {
-    /* Fixed 10px height to match the lines exactly */
-    width: 12px; 
-    height: 10px; 
+    width: 12px;
+    height: 10px;
     background-color: var(--terminal-green);
-    /* No border on the green box itself, purely solid color like your image */
     flex-shrink: 0;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
-/* FIXED: EXACT 3-LINE PATTERN */
 .card-scanlines {
     flex-grow: 1;
-    /* Height 10px = Line(2) + Gap(2) + Line(2) + Gap(2) + Line(2) */
-    height: 10px; 
-    
-    /* This gradient mathematically creates exactly 3 lines */
-    background-image: repeating-linear-gradient(
-        to bottom,
-        var(--ink-color) 0px,
-        var(--ink-color) 2px,      /* Line 1, 2, 3 */
-        transparent 2px,
-        transparent 4px            /* Gaps */
-    );
+    height: 10px;
+    background-image: repeating-linear-gradient(to bottom,
+            var(--ink-color) 0px,
+            var(--ink-color) 2px,
+            transparent 2px,
+            transparent 4px
+        );
 }
 
-.post-card-content { padding: 0 20px 20px 20px; }
-.post-title { font-size: 1.2rem; font-weight: normal; margin: 0; }
+.post-card-content {
+    padding: 0 20px 20px 20px;
+}
+
+/* SERIF FONT FOR POST BODY ONLY */
+.post-content {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    font-family: var(--font-mono);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.post-content figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2em 0;
+    text-align: center;
+}
+
+.post-content img {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.post-content figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.post-title {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin: 0;
+}
 
 /* --- REQUIRED GHOST CLASSES --- */
-.kg-width-wide { grid-column: wide-start / wide-end; width: 100%; }
-.kg-width-full { grid-column: full-start / full-end; width: 100vw; }
-.kg-image { max-width: 100%; height: auto; }
+.kg-width-wide {
+    grid-column: wide-start / wide-end;
+    width: 100%;
+}
+
+.kg-width-full {
+    grid-column: full-start / full-end;
+    width: 100vw;
+}
+
+.kg-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.kg-bookmark-card {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--ink-color);
+    margin-bottom: 24px;
+}
+
+.kg-bookmark-container {
+    display: flex;
+    text-decoration: none;
+    color: var(--ink-color);
+    min-height: 148px;
+}
+
+.kg-bookmark-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.kg-bookmark-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 1.3em;
+}
+
+.kg-bookmark-description {
+    font-size: 0.9rem;
+    line-height: 1.4em;
+    margin-top: 12px;
+    opacity: 0.8;
+    overflow-y: hidden;
+}
+
+.kg-bookmark-metadata {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-top: 14px;
+}
+
+.kg-bookmark-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+}
+
+.kg-bookmark-author {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.kg-bookmark-publisher {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 240px;
+}
+
+.kg-bookmark-thumbnail {
+    position: relative;
+    min-width: 33%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.kg-bookmark-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.kg-gallery-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    width: 100%;
+}
+
+.kg-gallery-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.kg-gallery-image img {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.kg-gallery-row:not(:last-of-type) {
+    margin-bottom: 0.75em;
+}
+
+.kg-gallery-image:not(:last-of-type) {
+    margin-right: 0.75em;
+}
 
 /* --- PAGINATION --- */
 .pagination {
@@ -243,23 +497,37 @@ form[data-members-form="error"] .message-error { display: block; }
     background-color: var(--ink-color);
 }
 
-/* --- POST META DATA (Date & Time) --- */
+/* --- POST META DATA --- */
 .post-meta {
-    font-size: 0.85rem;       /* Slightly smaller than the title */
-    margin-top: 10px;         /* Space between title and date */
+    font-size: 0.85rem;
+    margin-top: 10px;
     font-weight: bold;
-    opacity: 0.8;             /* Slightly dimmed to distinguish from title */
+    opacity: 0.8;
     text-transform: uppercase;
 }
 
-/* --- TAGS STYLING --- */
 .post-meta a {
-    color: inherit;           /* Inherit the grey color of the date */
+    color: inherit;
     text-decoration: none;
     text-transform: uppercase;
 }
 
 .post-meta a:hover {
-    color: var(--terminal-green); /* Glow green on hover */
+    color: var(--terminal-green);
     text-decoration: none;
+}
+
+/* --- RESPONSIVE VIDEO EMBEDS --- */
+.post-content iframe {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+}
+
+.kg-embed-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 24px 0;
 }
